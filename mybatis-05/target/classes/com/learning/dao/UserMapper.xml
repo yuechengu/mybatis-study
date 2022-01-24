@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--namespace：绑定一个对应的Dao/Mapper接口-->
+<mapper namespace="com.learning.dao.UserMapper">
+    <!--结果集映射-->
+    <resultMap id="UserMap" type="user">
+        <!--colum数据库中的字段，property实体类中的属性-->
+        <!--<result column="id" property="id"/>-->
+        <!--<result column="name" property="name"/>-->
+        <result column="pwd" property="password"/>
+    </resultMap>
+
+    <!--select查询语句-->
+    <select id="getUserList" resultMap="UserMap">
+        select * from mybatis.user;
+    </select>
+    
+    <select id="getUserById" parameterType="int" resultMap="UserMap">
+        select * from mybatis.user where id = #{id}
+    </select>
+
+    <!--insert插入语句-->
+    <!--对象中的属性，可以直接取出来-->
+    <insert id="addUser" parameterType="user">
+        insert into mybatis.user (id, name, pwd) values (#{id},#{name},#{pwd});
+    </insert>
+
+    <!--update修改语句-->
+    <update id="updateUser" parameterType="user">
+        update mybatis.user
+        set name = #{name}, pwd = #{pwd}
+        where id = #{id};
+    </update>
+
+    <!--delete删除语句-->
+    <delete id="deleteUser" parameterType="int">
+        delete
+        from mybatis.user
+        where id = #{id};
+    </delete>
+
+    <!--模糊查询-->
+    <select id="getUserLike" resultType="user">
+        select *
+        from mybatis.user
+        where name like "%"#{value}"%";
+    </select>
+
+    <!--分页查询-->
+    <select id="getUserByLimit" parameterType="map" resultMap="UserMap">
+        select * from mybatis.user limit #{startIndex},#{pageSize}
+    </select>
+</mapper>
